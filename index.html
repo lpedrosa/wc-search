@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" href="data:;base64,iVBORw0KGgo=" />
+        <title>Search input</title>
+        <style>
+            body {
+                font-family: Arial, Helvetica, sans-serif;
+            }
+            table {
+                margin-block: 1em;
+            }
+            .example {
+                max-width: 500px;
+                margin-block: 1em 0;
+            }
+            .highlight {
+                border-inline-start: 0.25em solid darkslategray;
+                padding: 1em 0.5em;
+                background-color: gainsboro;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Search Component Examples</h1>
+        <h2>Searching a Table</h2>
+        <div class="example">
+            <wc-search>
+                <label for="table-search">Search:</label>
+                <input type="text" id="table-search" name="search" />
+                <table>
+                    <tr>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td>Arnold</td>
+                        <td>16</td>
+                        <td>A very handsome turtle</td>
+                    </tr>
+                    <tr>
+                        <td>Rufus</td>
+                        <td>7</td>
+                        <td>Our loyal dog</td>
+                    </tr>
+                    <tr>
+                        <td>Pinkie</td>
+                        <td>2</td>
+                        <td>
+                            Contrary to the name, it's a grey mischievous cat
+                        </td>
+                    </tr>
+                </table>
+            </wc-search>
+        </div>
+        <h2>Searching a List</h2>
+        <div class="example">
+            <wc-search>
+                <label for="list-search">Search:</label>
+                <input type="text" id="list-search" name="search" />
+                <ul>
+                    <li>Arnold</li>
+                    <li>Rufus</li>
+                    <li>Pinkie</li>
+                </ul>
+            </wc-search>
+        </div>
+        <h2>Custom Search Logic</h2>
+        <div class="example">
+            <p class="highlight">Highlight the search matches in yellow.</p>
+            <wc-search id="custom-search-highlight">
+                <label for="list-search-2">Search:</label>
+                <input type="text" id="list-search-2" name="search" />
+                <ul>
+                    <li>Arnold</li>
+                    <li>Rufus</li>
+                    <li>Pinkie</li>
+                </ul>
+            </wc-search>
+            <p class="highlight">
+                Use the row's <code>data-search-index</code> attribute value as
+                the search index.
+            </p>
+            <div class="example">
+                <wc-search id="custom-search-use-index">
+                    <label for="table-search-2">Search:</label>
+                    <input type="text" id="table-search-2" name="search" />
+                    <table>
+                        <tr>
+                            <th>Name</th>
+                            <th>Age</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr data-search-index="1">
+                            <td>Arnold</td>
+                            <td>16</td>
+                            <td>A very handsome turtle</td>
+                        </tr>
+                        <tr data-search-index="2">
+                            <td>Rufus</td>
+                            <td>7</td>
+                            <td>Our loyal dog</td>
+                        </tr>
+                        <tr data-search-index="3">
+                            <td>Pinkie</td>
+                            <td>2</td>
+                            <td>
+                                Contrary to the name, it's a grey mischievous
+                                cat
+                            </td>
+                        </tr>
+                    </table>
+                </wc-search>
+            </div>
+        </div>
+        <script type="module" src="./index.js"></script>
+        <script type="module">
+            const search = document.getElementById("custom-search-highlight");
+            search.addEventListener("search", (event) => {
+                event.preventDefault();
+
+                const { query, targetChildren } = event.detail;
+
+                for (const child of targetChildren) {
+                    if (
+                        query === "" ||
+                        !child.textContent?.toLowerCase()?.includes(query)
+                    ) {
+                        child.style.backgroundColor = "";
+                    } else {
+                        child.style.backgroundColor = "yellow";
+                    }
+                }
+            });
+
+            const indexSearch = document.getElementById(
+                "custom-search-use-index"
+            );
+            indexSearch.addEventListener("search", (event) => {
+                event.preventDefault();
+
+                const { query, targetChildren } = event.detail;
+
+                for (const child of targetChildren) {
+                    const searchIndex = child.dataset.searchIndex ?? null;
+
+                    if (
+                        searchIndex == null ||
+                        query === "" ||
+                        searchIndex?.toLowerCase()?.includes(query)
+                    ) {
+                        child.style.display = "";
+                    } else {
+                        child.style.display = "none";
+                    }
+                }
+            });
+        </script>
+    </body>
+</html>

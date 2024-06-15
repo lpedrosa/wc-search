@@ -1,0 +1,17 @@
+{
+  "name": "wc-search-input",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "serve": "npx web-dev-server --open index.html",
+    "test": "npx web-test-runner ./test/**/*.test.js --node-resolve",
+    "test:watch": "npx web-test-runner ./test/**/*.test.js --node-resolve --watch"
+  },
+  "author": "lpedrosa",
+  "license": "MIT",
+  "devDependencies": {
+    "@web/dev-server": "^0.4.5",
+    "@web/test-runner": "^0.18.2",
+    "chai": "^5.1.1"
+  }
+}
